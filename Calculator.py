@@ -124,7 +124,7 @@ while Run:
 
 
     n = (knop('%', 250, 200, (237,118,14)))
-    if n == ['%']:
+    if n == ['%'] and not primer[-1] in (':', '*', '+', '-', ','):
         proc = ''
         i = len(primer) - 1
         while not(primer[i] in (':', '*', '+', '-')) and i > -1:
