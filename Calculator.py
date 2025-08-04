@@ -2,11 +2,13 @@ import pygame
 import math
 import keyboard as k
 
-
 pygame.init()
 pygame.display.set_caption("Калькулятор")
 screen = pygame.display.set_mode((450,700))
-pygame.display.set_icon(pygame.image.load('i.webp'))
+"""
+i_icon = os.getcwd()[:-4] + 'i.ico'                  # Доделай
+pygame.display.set_icon(pygame.image.load('i.ico'))"""
+
 
 Run = True
 texts = pygame.font.Font(None,67)
@@ -43,10 +45,12 @@ def ravno(prim):
     mouse_pos = pygame.mouse.get_pos()
     if krug.collidepoint(mouse_pos):
         if pygame.mouse.get_pressed()[0]:  # ЛКМ нажата?
+            if prim[-1] in (':', '*', '+', '-', ','):
+                return 'Error'
             prim = prim.replace(',', '.')
             prim = prim.replace(':', '/')
             otv = str(eval(prim)).replace('.', ',')
-            print(otv,prim)
+            print(f'{prim} = {otv}')
             if list(otv)[-1] == '0' and list(otv) == ',':
                 otv = int(otv)
             return otv
@@ -120,6 +124,24 @@ while Run:
 
 
     n = (knop('%', 250, 200, (237,118,14)))
+    if n == ['%']:
+        proc = ''
+        i = len(primer) - 1
+        while not(primer[i] in (':', '*', '+', '-')) and i > -1:
+            i -= 1
+        proc = ''.join(primer[i + 1:])
+        proc = proc.replace(',', '.')
+        print(proc,primer[i + 1:])
+        if (float(proc) / 100) == int(float(proc) / 100):
+            proc = [str(float(proc) // 100).replace('.', ',')]
+        else:
+            proc = [str(float(proc) / 100).replace('.', ',')]
+        del primer[i + 1:]
+        primer += proc
+
+
+
+
 
     primer += (knop(':', 350, 200, (237,118,14), 36))
 
