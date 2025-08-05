@@ -26,7 +26,7 @@ def drob(prim):
     ii = 0
     for i in range(len(prim)):
         otv = ''
-        if prim[i] in (':', '*', '+', '-', '/'):
+        if prim[i] in {':', '*', '+', '-'}:
             for iii in prim[ii:i]:
                 otv += str(iii)
             otv1.append(str(otv)) 
@@ -45,7 +45,7 @@ def ravno(prim):
     mouse_pos = pygame.mouse.get_pos()
     if krug.collidepoint(mouse_pos):
         if pygame.mouse.get_pressed()[0]:  # ЛКМ нажата?
-            if prim[-1] in (':', '*', '+', '-', ','):
+            if prim[-1] in {':', '*', '+', '-', ','}:
                 return 'Error'
             prim = prim.replace(',', '.')
             prim = prim.replace(':', '/')
@@ -76,7 +76,7 @@ def zapet(primer, zap=0):
         if zap == 0:
             primer += ','
             zap = 1
-    elif primer[-1] in (':', '*', '+', '-'):
+    elif primer[-1] in {':', '*', '+', '-'}:
         zap = 0
     return zap
 
@@ -124,10 +124,10 @@ while Run:
 
 
     n = (knop('%', 250, 200, (237,118,14)))
-    if n == ['%'] and not primer[-1] in (':', '*', '+', '-', ','):
+    if n == ['%'] and not primer[-1] in {':', '*', '+', '-', ','}:
         proc = ''
         i = len(primer) - 1
-        while not(primer[i] in (':', '*', '+', '-')) and i > -1:
+        while not(primer[i] in {':', '*', '+', '-'}) and i > -1:
             i -= 1
         proc = ''.join(primer[i + 1:])
         proc = proc.replace(',', '.')
@@ -146,10 +146,10 @@ while Run:
     primer += (knop(':', 350, 200, (237,118,14), 36))
 
 
-    if ((len(primer) > 1) and (primer[-1] in (',', ':', '*', '+', '-')) and (primer[-2] in (',', ':', '*', '+', '-'))):
+    if ((len(primer) > 1) and (primer[-1] in {':', '*', '+', '-', ','}) and (primer[-2] in {':', '*', '+', '-', ','})):
         del primer[-1]
     
-    if len(primer) > 1 and primer[0] == '0' and not primer[1] in (',', ':', '*', '+', '-'):
+    if len(primer) > 1 and primer[0] == '0' and not primer[1] in {':', '*', '+', '-', ','}:
         del primer[0]
 
     if primer != list(primer1):
