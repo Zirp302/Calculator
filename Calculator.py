@@ -1,7 +1,9 @@
+from decimal import Decimal, getcontext
 import pygame
 import math
 import keyboard as k
 
+getcontext().prec = 14
 pygame.init()
 pygame.display.set_caption("Калькулятор")
 screen = pygame.display.set_mode((450,700))
@@ -19,25 +21,28 @@ primer1 = ''
 primer2 = ''
 
 def drob(prim):
-    prim = list(prim)
-    print(prim)
-    otv1 = []
-    otv2 = []
-    ii = 0
-    for i in range(len(prim)):
-        otv = ''
-        if prim[i] in {':', '*', '+', '-'}:
-            for iii in prim[ii:i]:
-                otv += str(iii)
-            otv1.append(str(otv)) 
-            otv2.append(prim[i])
-            ii = i + 1
-        elif i + 1 == len(prim):
-            for iii in prim[ii:]:
-                otv += str(iii) 
-                print(iii)
-            otv1.append(str(otv)) 
-    return otv1,otv2
+    otv_drob = []
+    left = 0
+    prom = ''
+    for i in prim:
+        if i in {':', '*', '+', '-'}:
+            otv_drob.append(prom)
+            otv_drob.append(i)
+            prom = ''
+        else:
+            prom += i
+    otv_drob.append(prom)
+    a1 = 'Decimal("'
+    a2 = '")'
+    otv_n = ''
+
+    for i in otv_drob:
+        if i in {'/', '*', '+', '-'}:
+            otv_n += i
+        else:
+            otv_n += a1 + i + a2
+            print(otv_n)
+    return otv_n
 
 
 def ravno(prim):
@@ -49,6 +54,10 @@ def ravno(prim):
                 return 'Error'
             prim = prim.replace(',', '.')
             prim = prim.replace(':', '/')
+
+            if '.' in prim or '/' in prim:
+                prim = drob(prim)
+
             otv = str(eval(prim)).replace('.', ',')
             print(f'{prim} = {otv}')
             if list(otv)[-1] == '0' and list(otv) == ',':
@@ -71,7 +80,7 @@ def knop(a, x=0, y=0, rgb=(255,255,255), knop_x=31, knop_y=25): # Функция
     return list(otv1)
 
 def zapet(primer, zap=0):
-    if knop(',', 260, 600) == list(','): # Запятая
+    if knop(',', 260, 600) == [',']: # Запятая
         print(primer[-1], zap, primer)
         if zap == 0:
             primer += ','
@@ -110,10 +119,13 @@ while Run:
     if n == ['C']:
         primer = ['0']
         otv = ''
+        zap = 0
 
     n = knop('Del', 135, 200, (237,118,14), 11) # Еденичное удаление      Перенести в функцию
     if n == ['D', 'e', 'l']:
         if len(primer) > 1:
+            if primer[-1] == ',':
+                zap = 0
             del primer[-1]
         else:
             primer = ['0']
